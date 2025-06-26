@@ -9,6 +9,7 @@ import com.anirudh.studysmart.domain.model.Subject
 import com.anirudh.studysmart.domain.model.Task
 import com.anirudh.studysmart.presentation.Subject.SubjectScreen
 import com.anirudh.studysmart.presentation.dashboard.DashboardScreen
+import com.anirudh.studysmart.presentation.task.TaskScreen
 import com.anirudh.studysmart.presentation.theme.StudySmartTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StudySmartTheme {
-                SubjectScreen()
+                TaskScreen()
             }
         }
     }
