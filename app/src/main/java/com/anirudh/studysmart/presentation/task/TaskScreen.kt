@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,10 +29,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,9 +44,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.anirudh.studysmart.presentation.components.DeleteDialog
+import com.anirudh.studysmart.presentation.components.SubjectListBottomSheet
 import com.anirudh.studysmart.presentation.components.TaskCheckBox
+import com.anirudh.studysmart.presentation.components.TaskDatePicker
 import com.anirudh.studysmart.presentation.theme.Red
+import com.anirudh.studysmart.subjects
 import com.anirudh.studysmart.util.Priority
+import com.anirudh.studysmart.util.changeMillisToDateString
+import kotlinx.coroutines.launch
+import java.time.Instant
 
 @Preview(showBackground = true)
 @Composable
@@ -50,6 +60,7 @@ fun TaskScreenPreview() {
     TaskScreen()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskScreen() {
 
@@ -57,6 +68,15 @@ fun TaskScreen() {
     var description by remember { mutableStateOf("") }
 
     var isDeleteTaskDialogOpen by rememberSaveable { mutableStateOf(false) }
+
+    var isDatePickerDialogOpen by rememberSaveable { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = Instant.now().toEpochMilli()
+    )
+
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState()
+    var isBottomSheetOpen by remember { mutableStateOf(false) }
 
     var taskTitleError by rememberSaveable { mutableStateOf<String?>(null) }
     taskTitleError = when{
@@ -72,6 +92,27 @@ fun TaskScreen() {
         onDismissRequest = {isDeleteTaskDialogOpen = false},
         bodyText = "Are you sure you want to delete this task? This action cannot be undone",
         onConformButtonClick = {isDeleteTaskDialogOpen = false}
+    )
+
+    TaskDatePicker(
+        state = datePickerState,
+        isOpen = isDatePickerDialogOpen,
+        onDismissRequest = { isDatePickerDialogOpen = false },
+        onConfirmButtonClick = {isDatePickerDialogOpen = false}
+    )
+
+    SubjectListBottomSheet(
+        sheetState = sheetState,
+        isOpen = isBottomSheetOpen,
+        subjects = subjects,
+        onDismissRequest = {
+            isBottomSheetOpen = false
+        },
+        onSubjectClicked = {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (!sheetState.isVisible) isBottomSheetOpen = false
+            }
+        }
     )
 
     Scaffold(
@@ -120,11 +161,11 @@ fun TaskScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "12 Oct 2025",
+                    text = datePickerState.selectedDateMillis.changeMillisToDateString(),
                     style = MaterialTheme.typography.bodyLarge
                 )
                 IconButton(
-                    onClick = {}
+                    onClick = {isDatePickerDialogOpen = true}
                 ) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
@@ -169,7 +210,7 @@ fun TaskScreen() {
                     style = MaterialTheme.typography.bodyLarge
                 )
                 IconButton(
-                    onClick = {}
+                    onClick = {isBottomSheetOpen = true}
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
@@ -180,7 +221,9 @@ fun TaskScreen() {
             Button(
                 onClick = {},
                 enabled = taskTitleError == null,
-                modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp)
             ) {
                 Text(text="Save")
             }
@@ -240,11 +283,11 @@ private fun PriorityButton(
     onClick: () -> Unit
 ){
     Box(modifier = modifier
-            .background(backgroundColor)
-            .clickable { onClick() }
-            .padding(5.dp)
-            .border(1.dp, borderColor, RoundedCornerShape(5.dp))
-            .padding(5.dp),
+        .background(backgroundColor)
+        .clickable { onClick() }
+        .padding(5.dp)
+        .border(1.dp, borderColor, RoundedCornerShape(5.dp))
+        .padding(5.dp),
         contentAlignment = Alignment.Center
     ){
         Text(text = label, color = labelColor)
