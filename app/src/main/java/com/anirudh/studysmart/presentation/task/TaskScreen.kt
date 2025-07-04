@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.Navigator
 import com.anirudh.studysmart.presentation.components.DeleteDialog
 import com.anirudh.studysmart.presentation.components.SubjectListBottomSheet
 import com.anirudh.studysmart.presentation.components.TaskCheckBox
@@ -51,18 +52,39 @@ import com.anirudh.studysmart.presentation.theme.Red
 import com.anirudh.studysmart.subjects
 import com.anirudh.studysmart.util.Priority
 import com.anirudh.studysmart.util.changeMillisToDateString
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 import java.time.Instant
+
+data class TaskScreenNavArgs(
+    val taskId: Int?,
+    val subjectId: Int?
+)
+
+@Destination(navArgsDelegate = TaskScreenNavArgs::class)
+@Composable
+fun TaskScreenRoute(
+    navigator: DestinationsNavigator
+) {
+    TaskScreen(
+        onBackButtonClick = { navigator.navigateUp() }
+    )
+}
 
 @Preview(showBackground = true)
 @Composable
 fun TaskScreenPreview() {
-    TaskScreen()
+    TaskScreen(
+        onBackButtonClick = TODO()
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskScreen() {
+private fun TaskScreen(
+    onBackButtonClick: () -> Unit
+) {
 
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
@@ -121,7 +143,7 @@ fun TaskScreen() {
                 isTaskExist = true,
                 isComplete = false,
                 checkBoxBorderColor = Red,
-                onBackButtonClick = { },
+                onBackButtonClick = onBackButtonClick,
                 onDeleteButtonClick = { isDeleteTaskDialogOpen = true },
                 onCheckBoxClick = { }
             )

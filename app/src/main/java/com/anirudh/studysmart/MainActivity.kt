@@ -4,13 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.navigation.NavGraph
 import com.anirudh.studysmart.domain.model.Session
 import com.anirudh.studysmart.domain.model.Subject
 import com.anirudh.studysmart.domain.model.Task
-import com.anirudh.studysmart.presentation.Subject.SubjectScreen
-import com.anirudh.studysmart.presentation.dashboard.DashboardScreen
-import com.anirudh.studysmart.presentation.task.TaskScreen
+import com.anirudh.studysmart.presentation.NavGraphs
 import com.anirudh.studysmart.presentation.theme.StudySmartTheme
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.spec.NavGraphSpec
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +19,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StudySmartTheme {
-                TaskScreen()
+//                DestinationsNavHost(navGraph = NavGraphs.root)
+                DestinationsNavHost(navGraph = NavGraphs.root)
             }
         }
     }
