@@ -43,7 +43,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.Navigator
+import com.anirudh.studysmart.domain.model.Task
 import com.anirudh.studysmart.presentation.components.DeleteDialog
 import com.anirudh.studysmart.presentation.components.SubjectListBottomSheet
 import com.anirudh.studysmart.presentation.components.TaskCheckBox
@@ -67,6 +69,7 @@ data class TaskScreenNavArgs(
 fun TaskScreenRoute(
     navigator: DestinationsNavigator
 ) {
+    val viewModel: TaskViewModel = hiltViewModel()
     TaskScreen(
         onBackButtonClick = { navigator.navigateUp() }
     )
