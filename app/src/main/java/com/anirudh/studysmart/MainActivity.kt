@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.NavGraph
 import com.anirudh.studysmart.domain.model.Session
 import com.anirudh.studysmart.domain.model.Subject
@@ -30,11 +31,11 @@ class MainActivity : ComponentActivity() {
 
 
 val subjects = listOf(
-    Subject("Math", 10f, Subject.subjectCardColors[0],0),
-    Subject("Science", 10f, Subject.subjectCardColors[1],0),
-    Subject("English", 10f, Subject.subjectCardColors[2],0),
-    Subject("Computer", 10f, Subject.subjectCardColors[3],0),
-    Subject("History", 10f, Subject.subjectCardColors[4],0),
+    Subject("Math", 10f, Subject.subjectCardColors[0].map { it.toArgb() },0),
+    Subject("Science", 10f, Subject.subjectCardColors[1].map { it.toArgb() },0),
+    Subject("English", 10f, Subject.subjectCardColors[2].map { it.toArgb() },0),
+    Subject("Computer", 10f, Subject.subjectCardColors[3].map { it.toArgb() },0),
+    Subject("History", 10f, Subject.subjectCardColors[4].map { it.toArgb() },0),
 )
 
 val tasks = listOf(

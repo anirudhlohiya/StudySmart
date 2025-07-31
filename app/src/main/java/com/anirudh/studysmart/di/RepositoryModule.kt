@@ -18,7 +18,7 @@ abstract class RepositoryModule {
 
     @Singleton
     @Binds
-    abstract fun bindTaskRepository(
+    abstract fun bindSubjectRepository(
         impl: SubjectRepositoryImpl
     ): SubjectRepository
 

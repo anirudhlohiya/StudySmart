@@ -60,9 +60,11 @@ import com.anirudh.studysmart.sessions
 import com.anirudh.studysmart.subjects
 import com.anirudh.studysmart.tasks
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination(start = true)
+@RootNavGraph(start = true)
+@Destination
 @Composable
 fun DashboardScreenRoute(
     navigator: DestinationsNavigator
@@ -275,7 +277,7 @@ private fun SubjectCardsSection(
             items(subjectList) { subject ->
                 SubjectCard(
                     subjectName = subject.name,
-                    gradientColors = subject.colors,
+                    gradientColors = subject.colors.map { Color(it) },
                     onClick = {onSubjectCardClick(subject.subjectId)},
                 )
             }
