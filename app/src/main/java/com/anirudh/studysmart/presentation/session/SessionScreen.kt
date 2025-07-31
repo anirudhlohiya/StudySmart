@@ -1,6 +1,5 @@
 package com.anirudh.studysmart.presentation.session
 
-import android.R.style
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,7 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.Navigator
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.anirudh.studysmart.presentation.components.DeleteDialog
 import com.anirudh.studysmart.presentation.components.SubjectListBottomSheet
 import com.anirudh.studysmart.presentation.components.studySessionsList
@@ -46,13 +45,13 @@ import com.anirudh.studysmart.subjects
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
-import java.nio.file.WatchEvent
 
 @Destination
 @Composable
 fun SessionScreenRoute(
     navigator: DestinationsNavigator
 ) {
+    val viewModel: SessionViewModel = hiltViewModel()
     SessionScreen(
         onBackButtonClick = {navigator.navigateUp()}
     )
